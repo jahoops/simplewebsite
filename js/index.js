@@ -100,6 +100,44 @@ $(document).ready(function () {
       hachureAngle: 60, // angle of hachure,
       hachureGap: 8
     });
+    opentype.load('fonts/impact.ttf', (err,font) => {
+      let path = font.getPath('HOME', 24, 65, 50);
+      const pathCmd = path.commands.map(n => {return `${n.type} ${n.x} ${n.y}`});
+      rc.path(path.toPathData(2),{fill:'tan',fillStyle:'solid'});
+    });
   });
+
+  $('canvas.rough.button').hover( 
+    function() {
+      var rc = rough.canvas(this);
+      var context = this.getContext('2d');
+      context.clearRect(0, 0, this.width, this.height);
+      rc.rectangle(10, 10, 180, 80, {
+        fill: 'blue',
+        hachureAngle: 60, // angle of hachure,
+        hachureGap: 8
+      });
+      opentype.load('fonts/impact.ttf', (err,font) => {
+        let path = font.getPath('HOME', 24, 65, 50);
+        const pathCmd = path.commands.map(n => {return `${n.type} ${n.x} ${n.y}`});
+        rc.path(path.toPathData(2),{fill:'white',fillStyle:'solid'});
+      });
+    },
+    function() {
+      var rc = rough.canvas(this);
+      var context = this.getContext('2d');
+      context.clearRect(0, 0, this.width, this.height);
+      rc.rectangle(10, 10, 180, 80, {
+        fill: 'red',
+        hachureAngle: 60, // angle of hachure,
+        hachureGap: 8
+      });
+      opentype.load('fonts/impact.ttf', (err,font) => {
+        let path = font.getPath('HOME', 24, 65, 50);
+        const pathCmd = path.commands.map(n => {return `${n.type} ${n.x} ${n.y}`});
+        rc.path(path.toPathData(2),{fill:'tan',fillStyle:'solid'});
+      });
+    }
+  );
 
 });
