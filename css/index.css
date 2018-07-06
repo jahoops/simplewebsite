@@ -61,20 +61,28 @@ html {
 /* END Menu
  * --------------------------------------- */
 
-#logo {
-  color: transparent;
-  font-family: 'Slackey';
-  font-size: 2em;
-  position: absolute;
-  right: 2%;
-  top: 2%;
-  z-index: 999;
+#header {
+  width: 100%;
+  height: 64.8px;
+  z-index: 8;
+  position:absolute;
 }
-#logo span.white {
-  opacity: 0;
-  color: white;
-}
+#header .content {
 
+}
+#header .content #logo {
+  float: right;
+  width: 274.5px;
+  height: 64.8px;
+  background: url(/viz/sig.svg);
+  background-size: 274.5px 64.8px;
+}
+#svg1 {
+  fill:rgba(0,0,0,0.01);
+}
+path {
+  transition: all 4s;
+}
 .section {
   text-align: center;
   background-size: cover;
