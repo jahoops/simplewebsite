@@ -72,10 +72,9 @@ html {
 }
 #header .content #logo {
   float: right;
-  width: 274.5px;
-  height: 64.8px;
+  margin-top: 100px;
+  width: 100%;
   background: url(/viz/sig.svg);
-  background-size: 274.5px 64.8px;
 }
 #svg1 {
   fill:rgba(0,0,0,0.01);
