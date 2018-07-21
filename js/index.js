@@ -191,4 +191,16 @@ $(document).ready(function () {
   window.setTimeout(function(){
     doLogo();
   },1);
+
+  function removeLogo(){
+    $('#logo').css('transform','skewY(-90deg)');
+    $('#logo').css('opacity','0');
+  }
+
+  window.setTimeout(function(){
+    removeLogo();
+  },4000);
+
+
+
 });
