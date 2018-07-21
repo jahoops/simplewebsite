@@ -31,22 +31,6 @@ $(document).ready(function () {
       'tooltips': menuNames
     },
     afterRender: function () {
-      // rc.rectangle(10, 10, 200, 200); // x, y, width, height
-      // rc.circle(50, 50, 80, { fill: 'red' }); // fill with red hachure
-      // rc.rectangle(120, 15, 80, 80, { fill: 'red' });
-      // rc.circle(50, 150, 80, {
-      //   fill: "rgb(10,150,10)",
-      //   fillWeight: 3 // thicker lines for hachure
-      // });
-      // rc.rectangle(220, 15, 80, 80, {
-      //   fill: 'red',
-      //   hachureAngle: 60, // angle of hachure,
-      //   hachureGap: 8
-      // });
-      // rc.rectangle(120, 105, 80, 80, {
-      //   fill: 'rgba(255,0,200,0.2)',
-      //   fillStyle: 'solid' // solid fill
-      // });
     }
 
   });
@@ -83,15 +67,6 @@ $(document).ready(function () {
   box.on('mouseout', function () {
     document.body.style.cursor = 'default';
   });
-
-  // $("#logo").blast({
-  //   delimiter: "letter"
-  // }).velocity("transition.fadeIn", {
-  //   display: null,
-  //   duration: 1500,
-  //   stagger: 100,
-  //   delay: 1000
-  // });
 
   $('canvas.rough.button').each(function (idx, el) {
     var rc = rough.canvas(el);
@@ -192,14 +167,20 @@ $(document).ready(function () {
     doLogo();
   },1);
 
+  var cyclewin = 7;
+  var timerId = 0;
   function removeLogo(){
-    $('#logo').css('transform','skewY(-90deg)');
-    $('#logo').css('opacity','0');
+    $('#svg1').css('transform','skewY(-90deg)');
+    $('#svg1').css('opacity','0');
+    timerId = window.setInterval(function(){
+      location.href = "#page" + cyclewin--;
+      if(cyclewin<1) clearInterval(timerId);
+    },500);
   }
 
   window.setTimeout(function(){
     removeLogo();
-  },4000);
+  },6000);
 
 
 
