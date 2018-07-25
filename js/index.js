@@ -218,6 +218,9 @@ $(document).ready(function () {
       }
       if (cyclewin < 0) {
         clearInterval(timerId);
+        do3DText();
+        doHearts();
+        dangleText();
       }
     }, 500);
   }
