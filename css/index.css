@@ -94,14 +94,15 @@ path {
   transform-origin: 0;
 }
 
-#page7 { 
-  font-family: 'Source Sans Pro', Arial, sans-serif; 
-
-  text-transform: uppercase; 
-  text-align: center; 
-  letter-spacing: -3px; 
+page2 {
+  margin: 0;
+  overflow: hidden;
+  background: -webkit-radial-gradient( left bottom, circle farthest-corner, #e1fd3e, #174709);
+  background: -moz-radial-gradient( left bottom, circle farthest-corner, #e1fd3e, #174709);
+  background: -ms-radial-gradient( left bottom, circle farthest-corner, #e1fd3e, #174709);
+  background: -o-radial-gradient( left bottom, circle farthest-corner, #e1fd3e, #174709);
+  background: radial-gradient( farthest-corner circle at left bottom, #e1fd3e, #174709);
 }
-
 #page3 { 
   font-family: 'Source Sans Pro', Arial, sans-serif; 
   background: #becccc; 
@@ -119,27 +120,39 @@ path {
   font-size:40px;
   position: absolute;
 }
+#page7 { 
+  font-family: 'Source Sans Pro', Arial, sans-serif; 
 
+  text-transform: uppercase; 
+  text-align: center; 
+  letter-spacing: -3px; 
+}
 #page7 h2{
   width: 90%;
   margin: 0 auto;
-  font-size: 70px;
-  position: absolute;
+  font-size: 80px;
+  position: relative;
   color:gold;
 }
-
+#page7 h3{
+  width: 90%;
+  margin: 0 auto;
+  font-size: 60px;
+  position: relative;
+  color:gold;
+}
 /*
 text-shadow originated from: https://codepen.io/zitrusfrisch
 */
 #page7 .superShadow {
-  text-shadow:     0 1px 0 rgba(225, 225, 62,.44),
-	                 0 2px 0 rgba(225, 225, 62,.42),
-	                 0 3px 0 rgba(225, 225, 62,.4),
-	                 0 4px 0 rgba(225, 225, 62,.38),
-	                 0 5px 0 rgba(225, 225, 62,.36),
-	                 0 6px 0 rgba(225, 225, 62,.34),
-	                 0 7px 0 rgba(225, 225, 62,.32),
-	                 0 8px 0 rgba(225, 225, 62,.3),
+  text-shadow:     0 1px 0 rgba(110, 87, 10, 0.44),
+	                 0 2px 0 rgba(110, 87, 10, .42),
+	                 0 3px 0 rgba(110, 87, 10,.4),
+	                 0 4px 0 rgba(110, 87, 10,.38),
+	                 0 5px 0 rgba(110, 87, 10,.36),
+	                 0 6px 0 rgba(110, 87, 10,.34),
+	                 0 7px 0 rgba(110, 87, 10,.32),
+	                 0 8px 0 rgba(110, 87, 10,.3),
 	                 0 0 5px rgba(0,0,0,.05),
 	                0 1px 3px rgba(0,0,0,.2),
 	                0 3px 5px rgba(0,0,0,.2),
@@ -148,11 +161,14 @@ text-shadow originated from: https://codepen.io/zitrusfrisch
 	              0 20px 20px rgba(0,0,0,.3);
 }
 
-#page7 strong{
-  font-size:200px;
+#page7 p {
+  padding-top: 40px;
+  font-family: 'Molle', cursive;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-#page5 #container {
+#page5 #poem {
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
