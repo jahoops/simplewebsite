@@ -115,18 +115,15 @@
   <!-- SLIDES START -->
   <div id="pagepiling">
     <div id="page1" color="#FFFF00" menu-name="Home" class="section">
-      <canvas class="rough button" bcolor="red"  width="200" height="100"></canvas>
-      <canvas class="rough button" bcolor="green"  width="200" height="100"></canvas>
-      <canvas class="rough button" bcolor="blue"  width="200" height="100"></canvas>
+        <canvas class="p-canvas-webgl" id="canvas-webgl"></canvas>
     </div>
-    <div id="page2" color="#2ebe21" menu-name="Page 2" class="section">
-      <div id="container"></div>
+    <div id="page2" color="#FFFF00" menu-name="Page 2" class="section">
+        <canvas class="rough button" bcolor="red"  width="200" height="100"></canvas>
+        <canvas class="rough button" bcolor="green"  width="200" height="100"></canvas>
+        <canvas class="rough button" bcolor="blue"  width="200" height="100"></canvas>
     </div>
     <div id="page3" color="#4C9Eff" menu-name="Page 3" class="section">
-        <h2>3d text</h2>
-        <h2>animated</h2>
-        <h2>with multiple</h2>
-        <h2>text-shadows</h2>
+        <h3>Sometimes the best solution to morale problems is just to fire all of the unhappy people.</h3>
     </div>
     <div id="page4" color="#51cec4" menu-name="Page 4" class="section">
         <div>
@@ -173,12 +170,14 @@
         <canvas id="physicstext" width="900" height="500"></canvas>
     </div>
     <div id="page7" color="#f3b03d" menu-name="Page 7" class="section">
+        <h2>CONSULTING: If you're not a part of the solution, there's good money to be made in prolonging the problem.</h2>    
     </div>
   </div>
 
 
   <!-- SLIDES END -->
   <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/opentype.js/0.8.0/opentype.js"></script>

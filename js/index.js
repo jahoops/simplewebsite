@@ -221,6 +221,7 @@ $(document).ready(function () {
         do3DText();
         doHearts();
         dangleText();
+        doButterflies();
       }
     }, 500);
   }
@@ -232,3 +233,4 @@ $(document).ready(function () {
 
 
 });
+

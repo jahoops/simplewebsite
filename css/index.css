@@ -94,6 +94,14 @@ path {
   transform-origin: 0;
 }
 
+#page7 { 
+  font-family: 'Source Sans Pro', Arial, sans-serif; 
+
+  text-transform: uppercase; 
+  text-align: center; 
+  letter-spacing: -3px; 
+}
+
 #page3 { 
   font-family: 'Source Sans Pro', Arial, sans-serif; 
   background: #becccc; 
@@ -101,26 +109,37 @@ path {
   color: #fff; 
   text-align: center; 
   letter-spacing: -3px; 
-  padding:50px;
+  background-image: url('../viz/unhappy.jpg');
+  background-size: cover;
+}
+#page3 h3{
+  bottom: 5%;
+  width: 70%;
+  margin: 0 auto;
+  font-size:40px;
+  position: absolute;
 }
 
-#page3 h2{
-  font-size:100px;
-  position:relative;
+#page7 h2{
+  width: 90%;
+  margin: 0 auto;
+  font-size: 70px;
+  position: absolute;
+  color:gold;
 }
 
 /*
 text-shadow originated from: https://codepen.io/zitrusfrisch
 */
-#page3 .superShadow {
-  text-shadow:     0 1px 0 hsl(174,5%,80%),
-	                 0 2px 0 hsl(174,5%,75%),
-	                 0 3px 0 hsl(174,5%,70%),
-	                 0 4px 0 hsl(174,5%,66%),
-	                 0 5px 0 hsl(174,5%,64%),
-	                 0 6px 0 hsl(174,5%,62%),
-	                 0 7px 0 hsl(174,5%,61%),
-	                 0 8px 0 hsl(174,5%,60%),
+#page7 .superShadow {
+  text-shadow:     0 1px 0 rgba(225, 225, 62,.74),
+	                 0 2px 0 rgba(225, 225, 62,.72),
+	                 0 3px 0 rgba(225, 225, 62,.7),
+	                 0 4px 0 rgba(225, 225, 62,.68),
+	                 0 5px 0 rgba(225, 225, 62,.66),
+	                 0 6px 0 rgba(225, 225, 62,.64),
+	                 0 7px 0 rgba(225, 225, 62,.62),
+	                 0 8px 0 rgba(225, 225, 62,.6),
 	                 0 0 5px rgba(0,0,0,.05),
 	                0 1px 3px rgba(0,0,0,.2),
 	                0 3px 5px rgba(0,0,0,.2),
@@ -129,7 +148,7 @@ text-shadow originated from: https://codepen.io/zitrusfrisch
 	              0 20px 20px rgba(0,0,0,.3);
 }
 
-#page3 strong{
+#page7 strong{
   font-size:200px;
 }
 
@@ -169,4 +188,10 @@ text-shadow originated from: https://codepen.io/zitrusfrisch
 	margin-bottom: 1em;
 	max-width: 100%;
 	height: auto;
+}
+
+.p-canvas-webgl {
+  position: fixed;
+  z-index: 1;
+  top: 0; left: 0;
 }

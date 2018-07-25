@@ -1,3 +1,9 @@
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
 function do3DText() {
     var tl = new TimelineMax({
         repeat: 6,
@@ -94,7 +100,7 @@ function doHearts() {
     init();
 }
 
-dangleText() {
+function dangleText() {
     var _createClass = function () {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
@@ -133,14 +139,6 @@ dangleText() {
         });
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    console.clear();
 
 
     var TWOPI = Math.PI * 2;
@@ -255,308 +253,299 @@ dangleText() {
     }();
 
     // constraint class
-    var
+    var Constraint = function () {
+        function Constraint(n0, n1, stiffness) {
+            _classCallCheck(this, Constraint);
+            this.n0 = n0;
+            this.n1 = n1;
+            this.dist = distance(n0.x, n0.y, n1.x, n1.y);
+            this.stiffness = stiffness || 0.5;
+            this.firstRun = true;
+        }
+        // solve constraint
+        _createClass(Constraint, [{
+            key: 'solve',
+            value: function solve() {
+                var dx = this.n0.x - this.n1.x;
+                var dy = this.n0.y - this.n1.y;
 
-        Constraint = function () {
-            function Constraint(n0, n1, stiffness) {
-                _classCallCheck(this, Constraint);
-                this.n0 = n0;
-                this.n1 = n1;
-                this.dist = distance(n0.x, n0.y, n1.x, n1.y);
-                this.stiffness = stiffness || 0.5;
-                this.firstRun = true;
-            }
-            // solve constraint
-            _createClass(Constraint, [{
-                key: 'solve',
-                value: function solve() {
-                    var dx = this.n0.x - this.n1.x;
-                    var dy = this.n0.y - this.n1.y;
+                var newAngle = Math.atan2(dy, dx);
+                this.n1.angle = newAngle;
 
-                    var newAngle = Math.atan2(dy, dx);
-                    this.n1.angle = newAngle;
+                var currentDist = distance(this.n0.x, this.n0.y, this.n1.x, this.n1.y);
+                var delta = this.stiffness * (currentDist - this.dist) / currentDist;
+                dx *= delta;
+                dy *= delta;
 
-                    var currentDist = distance(this.n0.x, this.n0.y, this.n1.x, this.n1.y);
-                    var delta = this.stiffness * (currentDist - this.dist) / currentDist;
-                    dx *= delta;
-                    dy *= delta;
-
-                    if (this.firstRun) {
-                        this.firstRun = false;
-                        if (!this.n1.fixed) {
-                            this.n1.x += dx;
-                            this.n1.y += dy;
-                        }
-                        if (!this.n0.fixed) {
-                            this.n0.x -= dx;
-                            this.n0.y -= dy;
-                        }
-                        return;
-                    }
-
-                    var m1 = this.n0.mass + this.n1.mass;
-                    var m2 = this.n0.mass / m1;
-                    m1 = this.n1.mass / m1;
-
+                if (this.firstRun) {
+                    this.firstRun = false;
                     if (!this.n1.fixed) {
-                        this.n1.x += dx * m2;
-                        this.n1.y += dy * m2;
+                        this.n1.x += dx;
+                        this.n1.y += dy;
                     }
                     if (!this.n0.fixed) {
-                        this.n0.x -= dx * m1;
-                        this.n0.y -= dy * m1;
+                        this.n0.x -= dx;
+                        this.n0.y -= dy;
                     }
-
-
-                }
-                // draw constraint
-            }, {
-                key: 'draw',
-                value: function draw(ctx) {
-                    ctx.globalAlpha = 0.9;
-                    ctx.beginPath();
-                    ctx.moveTo(this.n0.x, this.n0.y);
-                    ctx.lineTo(this.n1.x, this.n1.y);
-                    ctx.strokeStyle = "#fff";
-                    ctx.stroke();
-                }
-            }]);
-            return Constraint;
-        }();
-    var
-
-
-
-        Rope = function () {
-            function Rope(rope) {
-                _classCallCheck(this, Rope);
-                var
-
-
-                    x =
-                    rope.x,
-                    y = rope.y,
-                    length = rope.length,
-                    points = rope.points,
-                    vertical = rope.vertical,
-                    fixedEnds = rope.fixedEnds,
-                    startNode = rope.startNode,
-                    letter = rope.letter,
-                    endNode = rope.endNode,
-                    stiffness = rope.stiffness,
-                    constrain = rope.constrain,
-                    gravity = rope.gravity,
-                    pointerMove = rope.pointerMove;
-
-                this.stiffness = stiffness || 1;
-                this.nodes = [];
-                this.constraints = [];
-                if (letter === ' ') {
-                    return this;
+                    return;
                 }
 
-                var dist = length / points;
+                var m1 = this.n0.mass + this.n1.mass;
+                var m2 = this.n0.mass / m1;
+                m1 = this.n1.mass / m1;
 
-                for (var i = 0, _last = points - 1; i < points; i++) {
-
-                    var size = letter && i === _last ? 15 : 2;
-                    var spacing = dist * i + size;
-                    var node = new VNode({
-                        w: size,
-                        mass: .1, //(i === last ? .5 : .1),
-                        fixed: fixedEnds && (i === 0 || i === _last)
-                    });
-
-
-                    node =
-                        i === 0 && startNode ||
-                        i === _last && endNode ||
-                        node;
-
-
-                    node.gravity = gravity;
-                    //node.pointerMove = pointerMove;
-
-                    if (i === _last && letter) {
-                        node.letter = letter;
-                        node.color = '#FFF';
-                        node.pointerMove = true;
-                    }
-
-                    node.oldX = node.x = x + (!vertical ? spacing : 0);
-                    node.oldY = node.y = y + (vertical ? spacing : 0);
-
-                    this.nodes.push(node);
-
+                if (!this.n1.fixed) {
+                    this.n1.x += dx * m2;
+                    this.n1.y += dy * m2;
                 }
-
-                constrain ? this.makeConstraints() : null;
+                if (!this.n0.fixed) {
+                    this.n0.x -= dx * m1;
+                    this.n0.y -= dy * m1;
+                }
 
 
             }
-            _createClass(Rope, [{
-                key: 'makeConstraints',
-                value: function makeConstraints()
+            // draw constraint
+        }, {
+            key: 'draw',
+            value: function draw(ctx) {
+                ctx.globalAlpha = 0.9;
+                ctx.beginPath();
+                ctx.moveTo(this.n0.x, this.n0.y);
+                ctx.lineTo(this.n1.x, this.n1.y);
+                ctx.strokeStyle = "#fff";
+                ctx.stroke();
+            }
+        }]);
+        return Constraint;
+    }();
+    var Rope = function () {
+        function Rope(rope) {
+            _classCallCheck(this, Rope);
+            var x =
+                rope.x,
+                y = rope.y,
+                length = rope.length,
+                points = rope.points,
+                vertical = rope.vertical,
+                fixedEnds = rope.fixedEnds,
+                startNode = rope.startNode,
+                letter = rope.letter,
+                endNode = rope.endNode,
+                stiffness = rope.stiffness,
+                constrain = rope.constrain,
+                gravity = rope.gravity,
+                pointerMove = rope.pointerMove;
 
-                {
-                    for (var i = 1; i < this.nodes.length; i++) {
-                        this.constraints.push(
-                            new Constraint(this.nodes[i - 1], this.nodes[i], this.stiffness));
+            this.stiffness = stiffness || 1;
+            this.nodes = [];
+            this.constraints = [];
+            if (letter === ' ') {
+                return this;
+            }
 
+            var dist = length / points;
+
+            for (var i = 0, _last = points - 1; i < points; i++) {
+
+                var size = letter && i === _last ? 15 : 2;
+                var spacing = dist * i + size;
+                var node = new VNode({
+                    w: size,
+                    mass: .1, //(i === last ? .5 : .1),
+                    fixed: fixedEnds && (i === 0 || i === _last)
+                });
+
+
+                node =
+                    i === 0 && startNode ||
+                    i === _last && endNode ||
+                    node;
+
+
+                node.gravity = gravity;
+                //node.pointerMove = pointerMove;
+
+                if (i === _last && letter) {
+                    node.letter = letter;
+                    node.color = '#FFF';
+                    node.pointerMove = true;
+                }
+
+                node.oldX = node.x = x + (!vertical ? spacing : 0);
+                node.oldY = node.y = y + (vertical ? spacing : 0);
+
+                this.nodes.push(node);
+
+            }
+
+            constrain ? this.makeConstraints() : null;
+
+
+        }
+        _createClass(Rope, [{
+            key: 'makeConstraints',
+            value: function makeConstraints()
+
+            {
+                for (var i = 1; i < this.nodes.length; i++) {
+                    this.constraints.push(
+                        new Constraint(this.nodes[i - 1], this.nodes[i], this.stiffness));
+
+                }
+            }
+        }, {
+            key: 'run',
+            value: function run(
+
+                pointer) {
+                // integration
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+                try {
+                    for (var _iterator = this.nodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _n = _step.value;
+                        _n.integrate(pointer);
+                    }
+                    // solve constraints
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
                     }
                 }
-            }, {
-                key: 'run',
-                value: function run(
-
-                    pointer) {
-                    // integration
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = undefined;
+                for (var i = 0; i < 5; i++) {
+                    var _iteratorNormalCompletion2 = true;
+                    var _didIteratorError2 = false;
+                    var _iteratorError2 = undefined;
                     try {
-                        for (var _iterator = this.nodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            var _n = _step.value;
-                            _n.integrate(pointer);
+                        for (var _iterator2 = this.constraints[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                            var n = _step2.value;
+                            n.solve();
                         }
-                        // solve constraints
                     } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
+                        _didIteratorError2 = true;
+                        _iteratorError2 = err;
                     } finally {
                         try {
-                            if (!_iteratorNormalCompletion && _iterator.return) {
-                                _iterator.return();
+                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                _iterator2.return();
                             }
                         } finally {
-                            if (_didIteratorError) {
-                                throw _iteratorError;
-                            }
-                        }
-                    }
-                    for (var i = 0; i < 5; i++) {
-                        var _iteratorNormalCompletion2 = true;
-                        var _didIteratorError2 = false;
-                        var _iteratorError2 = undefined;
-                        try {
-                            for (var _iterator2 = this.constraints[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                                var n = _step2.value;
-                                n.solve();
-                            }
-                        } catch (err) {
-                            _didIteratorError2 = true;
-                            _iteratorError2 = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                                    _iterator2.return();
-                                }
-                            } finally {
-                                if (_didIteratorError2) {
-                                    throw _iteratorError2;
-                                }
+                            if (_didIteratorError2) {
+                                throw _iteratorError2;
                             }
                         }
                     }
                 }
+            }
 
-            }, {
-                key: 'draw',
-                value: function draw(
-                    ctx) {
+        }, {
+            key: 'draw',
+            value: function draw(
+                ctx) {
 
-                    var vertices = Array.from(this.constraints).reduce(function (p, c, i, a) {
-                        p.push(c.n0);
-                        if (i == a.length - 1) p.push(c.n1);
-                        return p;
-                    }, []);
+                var vertices = Array.from(this.constraints).reduce(function (p, c, i, a) {
+                    p.push(c.n0);
+                    if (i == a.length - 1) p.push(c.n1);
+                    return p;
+                }, []);
 
-                    var h = function h(x, y) {
-                        return Math.sqrt(x * x + y * y);
-                    };
-                    var tension = 0.5;
+                var h = function h(x, y) {
+                    return Math.sqrt(x * x + y * y);
+                };
+                var tension = 0.5;
 
-                    if (!vertices.length) return;
+                if (!vertices.length) return;
 
-                    var controls = vertices.map(function () {
-                        return null;
-                    });
-                    for (var i = 1; i < vertices.length - 1; ++i) {
-                        var previous = vertices[i - 1];
-                        var current = vertices[i];
-                        var next = vertices[i + 1];
+                var controls = vertices.map(function () {
+                    return null;
+                });
+                for (var i = 1; i < vertices.length - 1; ++i) {
+                    var previous = vertices[i - 1];
+                    var current = vertices[i];
+                    var next = vertices[i + 1];
 
-                        var rdx = next.x - previous.x,
-                            rdy = next.y - previous.y,
-                            rd = h(rdx, rdy),
-                            dx = rdx / rd,
-                            dy = rdy / rd;
+                    var rdx = next.x - previous.x,
+                        rdy = next.y - previous.y,
+                        rd = h(rdx, rdy),
+                        dx = rdx / rd,
+                        dy = rdy / rd;
 
-                        var dp = h(current.x - previous.x, current.y - previous.y),
-                            dn = h(current.x - next.x, current.y - next.y);
+                    var dp = h(current.x - previous.x, current.y - previous.y),
+                        dn = h(current.x - next.x, current.y - next.y);
 
-                        var cpx = current.x - dx * dp * tension,
-                            cpy = current.y - dy * dp * tension,
-                            cnx = current.x + dx * dn * tension,
-                            cny = current.y + dy * dn * tension;
+                    var cpx = current.x - dx * dp * tension,
+                        cpy = current.y - dy * dp * tension,
+                        cnx = current.x + dx * dn * tension,
+                        cny = current.y + dy * dn * tension;
 
-                        controls[i] = {
-                            cp: {
-                                x: cpx,
-                                y: cpy
-                            },
-
-                            cn: {
-                                x: cnx,
-                                y: cny
-                            }
-                        };
-
-
-                    }
-
-                    controls[0] = {
-                        cn: {
-                            x: (vertices[0].x + controls[1].cp.x) / 2,
-                            y: (vertices[0].y + controls[1].cp.y) / 2
-                        }
-                    };
-
-
-
-                    controls[vertices.length - 1] = {
+                    controls[i] = {
                         cp: {
-                            x: (vertices[vertices.length - 1].x + controls[vertices.length - 2].cn.x) / 2,
-                            y: (vertices[vertices.length - 1].y + controls[vertices.length - 2].cn.y) / 2
+                            x: cpx,
+                            y: cpy
+                        },
+
+                        cn: {
+                            x: cnx,
+                            y: cny
                         }
                     };
 
-                    ctx.globalAlpha = 0.9;
-                    ctx.beginPath();
-                    ctx.moveTo(vertices[0].x, vertices[0].y);
-                    for (var _i = 1; _i < vertices.length; ++_i) {
-                        var v = vertices[_i];
-                        var ca = controls[_i - 1];
-                        var cb = controls[_i];
 
-                        ctx.bezierCurveTo(
-                            ca.cn.x, ca.cn.y,
-                            cb.cp.x, cb.cp.y,
-                            v.x, v.y);
-
-                    }
-                    ctx.strokeStyle = 'white';
-                    ctx.stroke();
-                    ctx.closePath();
-
-                    // draw nodes
-                    this.nodes.forEach(function (n) {
-                        n.draw(ctx);
-                    });
                 }
-            }]);
-            return Rope;
-        }();
+
+                controls[0] = {
+                    cn: {
+                        x: (vertices[0].x + controls[1].cp.x) / 2,
+                        y: (vertices[0].y + controls[1].cp.y) / 2
+                    }
+                };
+
+
+
+                controls[vertices.length - 1] = {
+                    cp: {
+                        x: (vertices[vertices.length - 1].x + controls[vertices.length - 2].cn.x) / 2,
+                        y: (vertices[vertices.length - 1].y + controls[vertices.length - 2].cn.y) / 2
+                    }
+                };
+
+                ctx.globalAlpha = 0.9;
+                ctx.beginPath();
+                ctx.moveTo(vertices[0].x, vertices[0].y);
+                for (var _i = 1; _i < vertices.length; ++_i) {
+                    var v = vertices[_i];
+                    var ca = controls[_i - 1];
+                    var cb = controls[_i];
+
+                    ctx.bezierCurveTo(
+                        ca.cn.x, ca.cn.y,
+                        cb.cp.x, cb.cp.y,
+                        v.x, v.y);
+
+                }
+                ctx.strokeStyle = 'white';
+                ctx.stroke();
+                ctx.closePath();
+
+                // draw nodes
+                this.nodes.forEach(function (n) {
+                    n.draw(ctx);
+                });
+            }
+        }]);
+        return Rope;
+    }();
 
 
     // Pointer class
@@ -652,21 +641,6 @@ dangleText() {
                         rope.draw(_this2.ctx);
                     });
 
-                    // // integration
-                    // for (let n of nodes) {
-                    //   n.integrate(pointer);
-                    // }
-                    // solve constraints
-                    // for (let i = 0; i < 4; i++) {
-                    //   for (let n of constraints) {
-                    //     n.solve();
-                    //   }
-                    // }
-                    // // draw constraints
-                    // for (let n of constraints) {
-                    //   n.draw(ctx);
-                    // }
-                    // draw nodes
                     var _iteratorNormalCompletion3 = true;
                     var _didIteratorError3 = false;
                     var _iteratorError3 = undefined;
@@ -840,13 +814,7 @@ dangleText() {
             if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
         }
 
-        function _classCallCheck(instance, Constructor) {
-            if (!(instance instanceof Constructor)) {
-                throw new TypeError("Cannot call a class as a function");
-            }
-        }
 
-        console.clear();
 
 
         var TWOPI = Math.PI * 2;
@@ -1470,4 +1438,175 @@ dangleText() {
             scene.addRope(r);
         });
     }
+}
+
+function doButterflies() {
+    var _createClass = function () {
+        function defineProperties(target, props) {
+            for (var i = 0; i < props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if ("value" in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+        return function (Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    var debounce = function debounce(callback, duration) {
+        var timer;
+        return function (event) {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback(event);
+            }, duration);
+        };
+    };
+
+    var SIZE = 280;
+    var
+
+        Butterfly = function () {
+            function Butterfly(i, texture) {
+                _classCallCheck(this, Butterfly);
+                this.uniforms = {
+                    index: {
+                        type: 'f',
+                        value: i
+                    },
+
+                    time: {
+                        type: 'f',
+                        value: 0
+                    },
+
+                    size: {
+                        type: 'f',
+                        value: SIZE
+                    },
+
+                    texture: {
+                        type: 't',
+                        value: texture
+                    }
+                };
+
+
+                this.physicsRenderer = null;
+                this.obj = this.createObj();
+            }
+            _createClass(Butterfly, [{
+                key: 'createObj',
+                value: function createObj() {
+                    var geometry = new THREE.PlaneBufferGeometry(SIZE, SIZE / 2, 24, 12);
+                    var mesh = new THREE.Mesh(
+                        geometry,
+                        new THREE.RawShaderMaterial({
+                            uniforms: this.uniforms,
+                            vertexShader: 'attribute vec3 position;\nattribute vec2 uv;\n\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform float index;\nuniform float time;\nuniform float size;\n\nvarying vec3 vPosition;\nvarying vec2 vUv;\n\nvoid main() {\n  float flapTime = radians(sin(time * 6.0 - length(position.xy) / size * 2.6 + index * 2.0) * 45.0 + 30.0);\n  float hovering = cos(time * 2.0 + index * 3.0) * size / 16.0;\n  vec3 updatePosition = vec3(\n    cos(flapTime) * position.x,\n    position.y + hovering,\n    sin(flapTime) * abs(position.x) + hovering\n  );\n\n  vec4 mvPosition = modelViewMatrix * vec4(updatePosition, 1.0);\n\n  vPosition = position;\n  vUv = uv;\n\n  gl_Position = projectionMatrix * mvPosition;\n}\n',
+                            fragmentShader: 'precision highp float;\n\nuniform float index;\nuniform float time;\nuniform float size;\nuniform sampler2D texture;\n\nvarying vec3 vPosition;\nvarying vec2 vUv;\n\n//\n// Description : Array and textureless GLSL 2D/3D/4D simplex\n//               noise functions.\n//      Author : Ian McEwan, Ashima Arts.\n//  Maintainer : ijm\n//     Lastmod : 20110822 (ijm)\n//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.\n//               Distributed under the MIT License. See LICENSE file.\n//               https://github.com/ashima/webgl-noise\n//\n\nvec3 mod289(vec3 x) {\n  return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 mod289(vec4 x) {\n  return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 permute(vec4 x) {\n     return mod289(((x*34.0)+1.0)*x);\n}\n\nvec4 taylorInvSqrt(vec4 r)\n{\n  return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nfloat snoise3(vec3 v)\n  {\n  const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;\n  const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);\n\n// First corner\n  vec3 i  = floor(v + dot(v, C.yyy) );\n  vec3 x0 =   v - i + dot(i, C.xxx) ;\n\n// Other corners\n  vec3 g = step(x0.yzx, x0.xyz);\n  vec3 l = 1.0 - g;\n  vec3 i1 = min( g.xyz, l.zxy );\n  vec3 i2 = max( g.xyz, l.zxy );\n\n  //   x0 = x0 - 0.0 + 0.0 * C.xxx;\n  //   x1 = x0 - i1  + 1.0 * C.xxx;\n  //   x2 = x0 - i2  + 2.0 * C.xxx;\n  //   x3 = x0 - 1.0 + 3.0 * C.xxx;\n  vec3 x1 = x0 - i1 + C.xxx;\n  vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y\n  vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y\n\n// Permutations\n  i = mod289(i);\n  vec4 p = permute( permute( permute(\n             i.z + vec4(0.0, i1.z, i2.z, 1.0 ))\n           + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))\n           + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));\n\n// Gradients: 7x7 points over a square, mapped onto an octahedron.\n// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)\n  float n_ = 0.142857142857; // 1.0/7.0\n  vec3  ns = n_ * D.wyz - D.xzx;\n\n  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)\n\n  vec4 x_ = floor(j * ns.z);\n  vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)\n\n  vec4 x = x_ *ns.x + ns.yyyy;\n  vec4 y = y_ *ns.x + ns.yyyy;\n  vec4 h = 1.0 - abs(x) - abs(y);\n\n  vec4 b0 = vec4( x.xy, y.xy );\n  vec4 b1 = vec4( x.zw, y.zw );\n\n  //vec4 s0 = vec4(lessThan(b0,0.0))*2.0 - 1.0;\n  //vec4 s1 = vec4(lessThan(b1,0.0))*2.0 - 1.0;\n  vec4 s0 = floor(b0)*2.0 + 1.0;\n  vec4 s1 = floor(b1)*2.0 + 1.0;\n  vec4 sh = -step(h, vec4(0.0));\n\n  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;\n  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;\n\n  vec3 p0 = vec3(a0.xy,h.x);\n  vec3 p1 = vec3(a0.zw,h.y);\n  vec3 p2 = vec3(a1.xy,h.z);\n  vec3 p3 = vec3(a1.zw,h.w);\n\n//Normalise gradients\n  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));\n  p0 *= norm.x;\n  p1 *= norm.y;\n  p2 *= norm.z;\n  p3 *= norm.w;\n\n// Mix final noise value\n  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);\n  m = m * m;\n  return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),\n                                dot(p2,x2), dot(p3,x3) ) );\n  }\n\nvec3 convertHsvToRgb(vec3 c) {\n  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nvoid main() {\n  vec4 texColor = texture2D(texture, vUv);\n\n  float noise = snoise3(vPosition / vec3(size * 0.25) + vec3(0.0, 0.0, time));\n  vec3 hsv = vec3(1.0 + noise * 0.2 + index * 0.7, 0.4, 1.0);\n  vec3 rgb = convertHsvToRgb(hsv);\n\n  gl_FragColor = vec4(rgb, 1.0) * texColor;\n}',
+                            depthWrite: false,
+                            side: THREE.DoubleSide,
+                            transparent: true
+                        }));
+                    mesh.rotation.set(-45 * Math.PI / 180, 0, 0);
+                    return mesh;
+                }
+            }, {
+                key: 'render',
+                value: function render(
+                    renderer, time) {
+                    this.uniforms.time.value += time;
+                    this.obj.position.z = this.obj.position.z > -900 ? this.obj.position.z - 4 : 900;
+                }
+            }]);
+            return Butterfly;
+        }();
+
+
+    var resolution = {
+        x: 0,
+        y: 0
+    };
+
+    var canvas = document.getElementById('canvas-webgl');
+    var renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        canvas: canvas
+    });
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 10000);
+    var clock = new THREE.Clock();
+    var loader = new THREE.TextureLoader();
+
+    var vectorTouchStart = new THREE.Vector2();
+    var vectorTouchMove = new THREE.Vector2();
+    var vectorTouchEnd = new THREE.Vector2();
+
+    var CAMERA_SIZE_X = 640;
+    var CAMERA_SIZE_Y = 480;
+
+    var BUTTERFLY_NUM = 7;
+    var butterflies = [];
+
+    var resizeCamera = function resizeCamera() {
+        var x = Math.min(resolution.x / resolution.y / (CAMERA_SIZE_X / CAMERA_SIZE_Y), 1.0) * CAMERA_SIZE_X;
+        var y = Math.min(resolution.y / resolution.x / (CAMERA_SIZE_Y / CAMERA_SIZE_X), 1.0) * CAMERA_SIZE_Y;
+        camera.left = x * -0.5;
+        camera.right = x * 0.5;
+        camera.top = y * 0.5;
+        camera.bottom = y * -0.5;
+        camera.updateProjectionMatrix();
+    };
+    var resizeWindow = function resizeWindow() {
+        resolution.x = window.innerWidth;
+        resolution.y = window.innerHeight;
+        canvas.width = resolution.x;
+        canvas.height = resolution.y;
+        resizeCamera();
+        renderer.setSize(resolution.x, resolution.y);
+    };
+    var render = function render() {
+        var time = clock.getDelta();
+        for (var i = 0; i < butterflies.length; i++) {
+            butterflies[i].render(renderer, time);
+        }
+        renderer.render(scene, camera);
+    };
+    var renderLoop = function renderLoop() {
+        render();
+        requestAnimationFrame(renderLoop);
+    };
+    var on = function on() {
+        window.addEventListener('resize', debounce(resizeWindow), 1000);
+    };
+
+    var init = function init() {
+        resizeWindow();
+        on();
+
+        renderer.setClearColor(0xeeeeee, 1.0);
+        camera.position.set(250, 500, 1000);
+        camera.lookAt(new THREE.Vector3());
+
+        loader.crossOrigin = 'anonymous';
+        loader.load('http://ykob.github.io/sketch-threejs/img/sketch/butterfly/tex.png', function (texture) {
+            texture.magFilter = THREE.NearestFilter;
+            texture.minFilter = THREE.NearestFilter;
+
+            for (var i = 0; i < BUTTERFLY_NUM; i++) {
+                butterflies[i] = new Butterfly(i, texture);
+                butterflies[i].obj.position.set(((i + 1) % 3 - 1) * i * 50, 0, 1800 / BUTTERFLY_NUM * i);
+                scene.add(butterflies[i].obj);
+            }
+            renderLoop();
+        });
+    };
+    init();
 }
