@@ -30,123 +30,20 @@ $(document).ready(function () {
       'position': 'right',
       'tooltips': menuNames
     },
-    afterRender: function () {}
+    afterLoad: function(anchorLink, index){
+      clearAll();
+      if(index == 2){
+        doFlowers();
+      }
+      if(index == 4){
+        doHearts();
+      }
+      if(index == 7){
+        do3DText();
+      }
+		}
 
   });
-
-  // function makebuttons() {
-  //   var stage = new Konva.Stage({
-  //     container: 'container',
-  //     width: window.innerWidth,
-  //     height: window.innerHeight
-  //   });
-
-  //   // add canvas element
-  //   var layer = new Konva.Layer();
-  //   stage.add(layer);
-
-  //   // create shape
-  //   var box = new Konva.Rect({
-  //     x: 50,
-  //     y: 50,
-  //     width: 100,
-  //     height: 50,
-  //     fill: '#00D2FF',
-  //     stroke: 'black',
-  //     strokeWidth: 4,
-  //     draggable: true
-  //   });
-  //   layer.add(box);
-
-  //   layer.draw();
-
-  //   // add cursor styling
-  //   box.on('mouseover', function () {
-  //     document.body.style.cursor = 'pointer';
-  //   });
-  //   box.on('mouseout', function () {
-  //     document.body.style.cursor = 'default';
-  //   });
-    
-  //   $('canvas.rough.button').each(function (idx, el) {
-  //     var c = $(this).attr('bcolor');
-  //     var rc = rough.canvas(el);
-  //     rc.rectangle(10, 10, 180, 80, {
-  //       fill: c,
-  //       hachureAngle: 60, // angle of hachure,
-  //       hachureGap: 8
-  //     });
-  //     opentype.load('fonts/impact.ttf', function(err, font) {
-  //       var path = font.getPath(c, 0, 0, 50);
-  //       var bb = path.getBoundingBox();
-  //       var xx = (200 - (bb.x2 - bb.x1))/2;
-  //       var yy = bb.y2 - bb.y1 + (100 - (bb.y2 - bb.y1))/2;
-  //       path = font.getPath(c, xx, yy, 50);
-  //       var pathCmd = path.commands.map( function(n) {
-  //         return n.type+n.x+n.y;
-  //       });
-  //       rc.path(path.toPathData(2), {
-  //         fill: c,
-  //         fillStyle: 'solid'
-  //       });
-  //     });
-  //   });
-
-  //   $('canvas.rough.button').hover(
-  //     function () {
-  //       var c = $(this).attr('bcolor');
-  //       var rc = rough.canvas(this);
-  //       var context = this.getContext('2d');
-  //       context.clearRect(0, 0, this.width, this.height);
-  //       rc.rectangle(10, 10, 180, 80, {
-  //         fill: c,
-  //         fillStyle: 'cross-hatch',
-  //         hachureAngle: 60, // angle of hachure,
-  //         hachureGap: 8
-  //       });
-  //       opentype.load('fonts/impact.ttf', (err, font) => {
-  //         var path = font.getPath(c, 0, 0, 50);
-  //         var bb = path.getBoundingBox();
-  //         var xx = (200 - (bb.x2 - bb.x1))/2;
-  //         var yy = bb.y2 - bb.y1 + (100 - (bb.y2 - bb.y1))/2;
-  //         path = font.getPath(c, xx, yy, 50);
-  //         var pathCmd = path.commands.map( function(n) {
-  //           return n.type+n.x+n.y;
-  //         });
-  //         rc.path(path.toPathData(2), {
-  //           strokeWidth: 2,
-  //           fill: c,
-  //           fillStyle: 'solid'
-  //         });
-  //       });
-  //     },
-  //     function () {
-  //       var c = $(this).attr('bcolor');
-  //       var rc = rough.canvas(this);
-  //       var context = this.getContext('2d');
-  //       context.clearRect(0, 0, this.width, this.height);
-  //       rc.rectangle(10, 10, 180, 80, {
-  //         fill: c,
-  //         hachureAngle: 60, // angle of hachure,
-  //         hachureGap: 8
-  //       });
-  //       opentype.load('fonts/impact.ttf', (err, font) => {
-  //         var path = font.getPath(c, 0, 0, 50);
-  //         var bb = path.getBoundingBox();
-  //         var xx = (200 - (bb.x2 - bb.x1))/2;
-  //         var yy = bb.y2 - bb.y1 + (100 - (bb.y2 - bb.y1))/2;
-  //         path = font.getPath(c, xx, yy, 50);
-  //         var pathCmd = path.commands.map( function(n) {
-  //           return n.type+n.x+n.y;
-  //         });
-  //         rc.path(path.toPathData(2), {
-  //           fill: c,
-  //           fillStyle: 'solid'
-  //         });
-  //       });
-  //     }
-  //   );
-  // }
 
   function doLogo() {
     const strideSize = 4.6; // dist to get point sample 
@@ -211,18 +108,16 @@ $(document).ready(function () {
     $('#svg1').css('transform', 'skewY(-90deg)');
     $('#svg1').css('opacity', '0');
     timerId = window.setInterval(function () {
-      location.href = "#page" + cyclewin--;
+      //location.href = "#page" + cyclewin--;
+      cyclewin--;
       if (cyclewin === 0) {
-        //makebuttons();
         $('#logo').remove();
       }
       if (cyclewin < 0) {
         clearInterval(timerId);
-        do3DText();
-        doHearts();
         dangleText();
         doButterflies();
-        doFlowers();
+        $.fn.pagepiling.moveTo(1);
       }
     }, 500);
   }

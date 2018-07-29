@@ -1,3 +1,11 @@
+function clearAll(){
+    var canvas = document.getElementById("heartCanvas");
+    canvas.width = 0;
+    canvas = document.getElementById("flowers");
+    canvas.width = 0;
+    $('#page7 .superShadow').removeClass('superShadow');
+}
+
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -6,7 +14,7 @@ function _classCallCheck(instance, Constructor) {
 
 function do3DText() {
     var tl = new TimelineMax({
-        repeat: 2,
+        repeat: 1,
         repeatDelay: 1,
         yoyo: true
     });
@@ -19,7 +27,7 @@ function do3DText() {
         className: "+=superShadow",
         top: "-=10px",
         ease: Power1.easeIn
-    }, "0.3", "start")
+    }, "0.3", "start");
 }
 
 function doHearts() {
