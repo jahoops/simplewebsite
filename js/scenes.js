@@ -16,7 +16,7 @@ function do3DText() {
     var tl = new TimelineMax({
         repeat: 1,
         repeatDelay: 1,
-        yoyo: true
+        yoyo: false
     });
     tl.staggerTo("h2", 0.2, {
         className: "+=superShadow",
